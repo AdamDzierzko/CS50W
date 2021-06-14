@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Social Network{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'capstone/styles.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+
+    <div class="topnav" id="myTopnav">
+        <a class="navbar-brand" href="#">Playlist</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'index' %}">{{ user.username }}</a>
+            <a href="{% url 'config' %}">Config</a>
+            <a class="nav-link" href="{% url 'addmovie' %}">Add new movie</a>
+        {% endif %}
+            <a  href="{% url 'allmovies' %}">All Movies</a>
+            <a  href="{% url 'best' %}">Best</a>
+            <a  href="{% url 'mostpopular' %}">Most popular</a>
+        {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+        {% endif %}
+
+        <a href="javascript:void(0);" class="icon" onclick="menu()">
+        <i class="fa fa-bars"></i>
+        </a>
+    </div>
+
+        <div class="body">
+            {% block body %}
+            {% endblock %}
+        </div>
+
+
+    </body>
+
+</html>

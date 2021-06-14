@@ -1,0 +1,174 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+{% if user.is_authenticated and w == 1%}
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-11">
+        <div class="col-lg-11">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+                <div id="compose-view">
+                    <h3>New Post</h3>
+                    <form id="compose-form">
+                        {% csrf_token %}
+                        <textarea class="form-control" id="post-text" placeholder="Body"></textarea>
+                        <br>
+                        <input type="submit" class="btn btn-primary" id="submit"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if w == 2 %}
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-11">
+        <div class="col-lg-11">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+
+                <table>
+                    <tbody>
+                    <tr>
+                        <td id="f-user">{{profil}}</td>
+                        <td id="f-button">
+                        {% if user.is_authenticated %}
+                            {% if user.id != id %}
+                                {% if id in followed %}
+                                    <button type="button" class="btn btn-outline-primary" id="unfollow" data-value={{id}}>Unfollow</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary" id="follow" data-value={{id}}>Follow</button>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        </td>
+                        <td id="follows">
+                            Follows: {{profil.numberOfFollowing}}
+                        </td>
+                        <td id="followers">
+                            Followers: {{profil.numberOfFollowers}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if w == 3 %}
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-11">
+        <div class="col-lg-11">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+                <h1>Posts from followed users</h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% for post in page_obj %}
+
+    {% if post.id == id %}
+
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-11">
+        <div class="col-lg-11">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td id="username-1">{{post.user}}</td>
+                        <td id="time">
+                            {{post.timestamp}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <form id="compose-edit">
+                    {% csrf_token %}
+                    <textarea class="form-control" id="post-edit" placeholder="Body">{{post.text}}</textarea>
+                    <br>
+                    <input type="hidden" id="id-edit" value={{post.id}}>
+                    <input type="submit" class="btn btn-primary" id="submit"/>
+                </form>
+                <br>
+                {% if post.id in likes %}
+                    <span style="font-size:30px;"><i class="fa fa-heart" style="color: red" id="dislike" data-value={{post.id}} data-type={{w}} data-user={{post.user.id}}></i> {{post.numberOfLikes}}</span>
+                {% else %}
+                    <span style="font-size:30px;"><i class="fa fa-heart-o" style="color: red" id="like" data-value={{post.id}} data-type={{w}} data-user={{post.user.id}}></i> {{post.numberOfLikes}}</span>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+    {% else %}
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-11">
+        <div class="col-lg-11">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td id="username"><a id="username-1" href="{% url 'profil' post.user.id %}">{{post.user}}</a></td>
+
+                        <td id="time">
+                            {% if post.user == user %}
+                            <a href="{% url 'edit' post.id %}"><button type="button" class="btn btn-primary btn-sm" id="edit" data-value={{post.id}}>Edit</button></a>
+                            {% endif %}
+                            {{post.timestamp}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>{{post.text}}</p>
+                    {% if post.id in likes %}
+                    <span style="font-size:30px;"><i class="fa fa-heart" style="color: red" id="dislike" data-value={{post.id}} data-type={{w}} data-user={{post.user.id}}></i> {{post.numberOfLikes}}</span>
+                    {% else %}
+                    <span style="font-size:30px;"><i class="fa fa-heart-o" style="color: red" id="like" data-value={{post.id}} data-type={{w}} data-user={{post.user.id}}></i> {{post.numberOfLikes}}</span>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+    {% endif %}
+{% endfor %}
+
+<br>
+<div class="pagination">
+    <span class="step-links">
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        <br>
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<br>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

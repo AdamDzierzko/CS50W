@@ -1,0 +1,54 @@
+{{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My winns</h2>
+
+{% for listing in listings%}
+    {% if listing.status == 0 %}
+
+{% for bid in bids %}
+{% if listing.id == bid.listing_id.id %}
+<div class="container" style="min-width: 2000px;">
+    <div class="text-center">
+        <a href="{% url 'one' listing.id%}"><h2> {{ listing.title }}</h2></a>
+    </div>
+    <div class="row lg-faded">
+        <div class="col-lg-4">
+            <div class="card card-body h-100 justify-content-center">
+                <img src="{{listing.image}}" class="card-img" alt="...">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-body h-100 justify-content-right">
+                <h4>Description</h4>
+                <p>{{ listing.description }}</p>
+                <h4>Category : {{ listing.category.categoryName }}</h4>
+            </div>
+        </div>
+        <div class="col-lg-2">
+                <div class="card card-body h-100 justify-content-top">
+                    <br>
+                    <br>
+                    <h3>Final price:</h3>
+
+
+
+                            <h1>$ {{ bid.bid }}</h1>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <h3>Won by:</h3>
+                            <h1> {{ bid.user_id }}</h1>
+                            {% endif %}
+                        {% endfor %}
+                </div>
+        </div>
+    </div>
+</div>
+    {% endif %}
+{% endfor %}
+
+
+
+{% endblock %}

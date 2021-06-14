@@ -1,0 +1,234 @@
+
+* {
+  box-sizing: border-box;
+}
+
+[class*="col"] {
+  float: left;
+  padding: 15px;
+
+}
+
+body {
+    background-color: black;
+}
+
+
+.row1 {
+  content: "";
+  clear: both;
+  padding: 8px;
+  margin: auto;
+  width: 90%;
+  min-height: 270px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #a00000;
+  color: white;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 775px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 775px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+/* For mobile phones: */
+[class*="col"] {
+  width: 100%;
+    color: orange;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+}
+
+@media only screen and (max-width: 600px) {
+  .colp3 {
+    width: 100%;
+    margin-bottom: 25px;
+}
+  .coment-phone {
+    margin-top: 200px;
+}
+}
+
+@media only screen and (max-width: 600px) {
+  .coment {
+    margin-bottom: 5000px;
+    background-color: red;
+  }
+
+}
+
+@media only screen and (min-width: 600px) {
+  /* For tablets: */
+  .cols1 {width: 20%;
+    color: orange;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 250px;
+
+
+  }
+  .cols2 {width: 56%;
+    color: orange;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 250px;
+  }
+  .cols3 {width: 20%;
+    color: orange;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 250px;
+  }
+}
+
+@media only screen and (min-width: 775px) {
+  /* For desktop: */
+  .col1 {width: 20%;
+  color: orange;
+  padding: 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 215px;
+  }
+  .col2 {width: 56%;
+    color: orange;
+      border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 215px;
+  }
+  .col3 {width: 20%;
+    color: orange;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 1%;
+    margin-right: 1%;
+    min-height: 215px;
+
+  }
+}
+
+.conf {
+    background-color: black;
+    color: orange;
+    width: 90%;
+    margin: auto;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    padding: 18px;
+
+}
+
+.addmovie {
+    background-color: black;
+    color: orange;
+    width: 90%;
+    margin: auto;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    padding: 18px;
+
+}
+
+.editmovie {
+    background-color: black;
+    color: orange;
+    width: 90%;
+    margin: auto;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    padding: 18px;
+
+}
+
+
+.coment {
+    background-color: black;
+    color: orange;
+    width: 90%;
+    margin: auto;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    padding: 18px;
+
+}
+
+.login-reg {
+    color: orange;
+    width: 90%;
+    margin: auto;
+    margin-top: 50px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: orange;
+    padding: 18px;
+}
+
+.add {
+    color: orange;
+}

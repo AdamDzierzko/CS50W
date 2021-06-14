@@ -1,0 +1,114 @@
+.navi {
+  padding-top: 10px;
+  padding-right: 15px;
+  text-align: right;
+  font-size: 15px;
+  text-decoration: none;
+  font-family: arial, monospace;
+  color: black;
+  word-spacing: 20px;
+}
+
+.logo {
+  padding-top: 150px;
+  text-align: center;
+}
+
+.form {
+  vertical-align: middle;
+    text-align: center;
+  padding-left: 5px;
+}
+
+#q {
+  width: 50%;
+  vertical-align: middle;
+  margin: 2% 25% 0% 25%;
+  border-radius: 50%;
+}
+
+#adv {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 40px;
+  color: #e63900;
+  font-size: 22px;
+}
+
+#adv-s-bar {
+  background-color: #f2f2f2;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.tab-head {
+padding-left: 40px;
+color: #808080;
+}
+
+.tab-head-2 {
+  width: 50%;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.tab-head-3 {
+  font-size: 12px;
+  color: #808080;
+}
+
+.tab-row1 {
+  padding-top: 20px;
+  padding-left: 40px;
+  font-size: 13px;
+  min-width: 220px;
+  color: #595959;
+}
+
+.tab-row-i {
+  padding-top: 20px;
+  padding-left: 10px;
+  width: 50%;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.tab-input {
+  padding-left: 2px;
+  width: 100%;
+}
+
+.tab-row-2 {
+  padding-top: 20px;
+  padding-left: 30px;
+  font-size: 10px;
+  color: #595959;
+}
+
+.adv-button {
+left: 400px;
+padding-left: 45%;
+}
+
+.tab-row-button {
+  padding-top: 27px;
+  width: 50%;
+  min-width: 300px;
+  max-width: 600px;
+  text-align: right;
+}
+
+@media (max-width: 1200px) {
+  .tab-row-2 {
+    visibility: hidden;
+    font-size: 1px;
+    width: 400px;
+  }
+
+  .tab-head-3 {
+    visibility: hidden;
+    font-size: 1px;
+    width: 400px;
+  }
+}

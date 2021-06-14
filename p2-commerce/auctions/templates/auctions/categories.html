@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Categories</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+{{ ma }}
+
+
+
+    <div class="form-group">
+
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category' category.categoryName%}">{{ category.categoryName}}</a></li>
+        {% endfor %}
+    </ul>
+
+        </div>
+
+{% endblock %}
+
+
+
+

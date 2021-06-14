@@ -1,0 +1,20 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    New Page
+{% endblock %}
+
+{% block body %}
+
+		<h2>New Page</h2>
+			<form action="{%url 'newPage'%}" method="post">
+				{% csrf_token %}
+				<h4>Enter title</h4>
+				<input class="search" type="text" name="nTitle" placeholder="Enter title" style="width: 800px;">
+				<h4>Content of the entry</h4>
+				<textarea name="nContent" placeholder="New enter content" style="width: 800px; height: 500px"></textarea>
+				<br>
+         		<input type="submit" value="New Entry" name="btnK" class="btn btn-light">
+			</form>
+
+{% endblock %}

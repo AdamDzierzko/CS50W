@@ -1,0 +1,63 @@
+#username {
+        font-size: 25px;
+        color: black;
+}
+
+#time {
+    margin: 5px;
+    padding: 1px;
+    font-size: 20px;
+    text-align: right;
+    color: gray;
+}
+
+.pagination {
+  display: inline-block;
+  margin: 0px 0px 20px 50px;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  font-size: 22px;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+background-color: #ddd;
+}
+
+#f-user {
+    font-size: 32px;
+    width: 20%;
+}
+
+#f-button {
+    width: 60%;
+}
+
+#follows {
+    font-size: 20px;
+    color: green;
+    vertical-align: bottom;
+    width: 10%;
+}
+
+#followers {
+    font-size: 20px;
+    color: red;
+    vertical-align: bottom;
+    width: 18%;
+}
+
+#username-1 {
+    font-size: 30px;
+    color: black;
+}

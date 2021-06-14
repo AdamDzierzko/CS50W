@@ -1,0 +1,370 @@
+{% extends "capstone/layout.html" %}
+{% load static %}
+
+{% block body %}
+{% if f == 1 %}
+Index
+{% for movie in movies %}
+<div class="row1">
+    <div class="col1 cols1">
+        <div>
+            <h2>{{movie.title}}</h2>
+            <h4>Year: {{movie.year}}</h4>
+            <h4>Genere: {{movie.genere.genere_name}}</h4>
+        </div>
+    </div>
+
+    <div class="col2 cols2">
+        <h2>Description
+            <span style="margin: 5%"></span>
+                {% if user.is_authenticated and user.id == movie.user.id %}
+                    <a href="{% url 'edit_movie' movie.id%}" style="margin-left: 0%;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Edit</button></a>
+                    <a href="{% url 'delete_movie' movie.id%}" style="margin-left: 0%;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Remove</button></a>
+                {% endif %}
+                    <a href="{% url 'coment_index' movie.id%}" style="margin-left: 0%;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Coment</button></a>
+        </h2>
+        <h4>Director: {{movie.director}}</h4>
+        <h4>Actors:
+            <span>
+                {% for movieactor in movieactors %}
+                    {% if movieactor.movie_id.id == movie.id %}
+                        {% for actor in actors %}
+                            {% if movieactor.actor_id.id == actor.id %}
+                                {{actor.actor_name}},
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </h4>
+        <h6>{{movie.description}}</h6>
+    </div>
+
+    <div class="col3 cols3 colp3">
+        <h2>Grade:
+        {% if user.is_authenticated %}
+            {% for grade in grades %}
+                {% if grade.id == grade_id and g == 1 and movie.id == grade.movie_id.id %}
+                    <form id="edit-form-grade">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input autofocus class="form-control" type="number" id="grade_edit" value="{{grade.grade}}" min="0" max="5" step="0.1">
+                        </div>
+                        <input type="hidden" id="grade_movie" value="{{ movie.id }}">
+                        <input type="hidden" id="edit_grade_id" value="{{ grade.id }}">
+                        <input type="hidden" id="edit_grade_type" value="index">
+                        <input type="submit" class="btn btn-primary" id="edit-grade" style="background-color: #a00000; border-color: #a00000;"/>
+                    </form>
+                {% else %}
+                    {% if grade.movie_id.id == movie.id %}
+                        {% for key, value_list in g_mo.items %}
+                            {% if key == movie.id %}
+                                {% if value_list.1 == user.id and user.id == grade.user_id.id and user.is_authenticated %}
+                                    {{ value_list.0 }}
+                                    <a href="{% url 'edit_grade' grade.id %}"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Edit</button></a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for key, value_list in g_mo.items %}
+                {% if key == movie.id %}
+                    {{ value_list.0 }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        </h2>
+        {% if user.is_authenticated and movie.id not in gr %}
+            <form id="compose-form-grade">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input autofocus class="form-control" type="number" id="grade" placeholder="Grade" min="0" max="5" step="0.1">
+                </div>
+                <input type="hidden" id="grade_movie" value="{{ movie.id }}">
+                <input type="submit" class="btn btn-primary" id="submit-grade" style="background-color: #a00000; border-color: #a00000;"/>
+            </form>
+        {% endif %}
+        <h6>Number of grades: {{ movie.numberOfGrades }}</h6>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if user.is_authenticated and f == 2%}
+Add movie
+<div class="addmovie" id="aa">
+    <div id="compose-view">
+        <h3>New Movie</h3>
+        <form id="compose-form-movie">
+            {% csrf_token %}
+            <div class="form-group">
+                <span class="add">Title</span>
+                <input autofocus class="form-control" type="text" id="title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <span class="add">Genere</span>
+                <select autofocus class="form-control" id="genere">
+                    {% for genere in generes %}
+                        <option value="{{ genere.id }}">{{genere.genere_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <span class="add">Year</span>
+                <input autofocus class="form-control" type="number" id="year" min="1900" max={{maxyear}} step="1" placeholder="Year">
+            </div>
+            <div class="form-group">
+                <span class="add">Director</span>
+                <input autofocus class="form-control" type="text" id="director" placeholder="Director">
+            </div>
+            <span class="add">Actors</span>
+            <div class="form-group">
+                {% for actor in actors %}
+                <label class="checkbox-inline">
+                    <input autofocus  type="checkbox" id="actor" value="{{ actor.id }}"> {{actor.actor_name}}</br>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <span class="add">Description</span>
+                <textarea class="form-control" id="description" placeholder="Description"></textarea>
+            </div>
+            <br>
+            <input type="submit" class="btn btn-primary" id="submit-movie" style="background-color: #a00000; border-color: #a00000;"/>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if user.is_authenticated and f == 6%}
+Edit movie
+<div class="editmovie" id="aa">
+    <div id="compose-view">
+        <h3>Edit Movie</h3>
+        <form id="edit-form-movie">
+            {% csrf_token %}
+            <input type="hidden" id="edit_movie" value="{{ movie.id }}">
+            <div class="form-group">
+                <span class="add">Title</span>
+                <input autofocus class="form-control" type="text" id="title" placeholder="Title" value="{{movie.title}}">
+            </div>
+            <div class="form-group">
+                <span class="add">Genere</span>
+                <select autofocus class="form-control" id="genere">
+                    {% for genere in generes %}
+                        {% if genere.id == movie.genere.id %}
+                            <option value="{{ genere.id }}" selected>{{genere.genere_name}}</option>
+                        {% else %}
+                            <option value="{{ genere.id }}">{{genere.genere_name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <span class="add">Year</span>
+                <input autofocus class="form-control" type="number" id="year" min="1900" max={{maxyear}} step="1" value="{{movie.year}}" placeholder="Year">
+            </div>
+            <div class="form-group">
+                <span class="add">Director</span>
+                <input autofocus class="form-control" type="text" id="director" placeholder="Director" value="{{movie.director}}">
+            </div>
+            <span class="add">Actors</span>
+            <div class="form-group">
+                {% for actor in actors %}
+                    <label class="checkbox-inline">
+                        {% if actor in actormovie %}
+                            <input autofocus  type="checkbox" id="actor" value="{{ actor.id }}" checked> {{actor.actor_name}}</br>
+                        {% else %}
+                            <input autofocus  type="checkbox" id="actor" value="{{ actor.id }}"> {{actor.actor_name}}</br>
+                        {% endif%}
+                    </label>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <span class="add">Description</span>
+                <textarea class="form-control" id="description" placeholder="Description">{{movie.description}}</textarea>
+            </div>
+            <br>
+            <input type="submit" class="btn btn-primary" id="submit-movie" style="background-color: #a00000; border-color: #a00000;"/>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if user.is_authenticated and f == 3 %}
+<br>
+    <div class="conf" id="aa">
+        <div id="compose-view2">
+            <h3>New Genere</h3>
+            <form id="compose-form-genere">
+                {% csrf_token %}
+                <textarea class="form-control" id="genere-text" placeholder="Body"></textarea>
+                <br>
+                <input type="submit" class="btn btn-primary" id="submit-genere" style="background-color: #a00000; border-color: #a00000;"/>
+            </form>
+        </div>
+        <hr>
+        <h3>Generes</h3>
+            <ul>
+                {% for genere in generes %}
+                <li>{{genere.genere_name}}</li>
+                {% endfor %}
+            </ul>
+    </div>
+<br>
+    <div class="conf" id="aa">
+        <div id="compose-view2">
+            <h3>New Actor</h3>
+            <form id="compose-form-actor">
+                {% csrf_token %}
+                <textarea class="form-control" id="actor-text" placeholder="Body"></textarea>
+                <br>
+                <input type="submit" class="btn btn-primary" id="submit-actor" style="background-color: #a00000; border-color: #a00000;"/>
+            </form>
+        </div>
+        <hr>
+            <h3>Actors</h3>
+            <ul>
+                {% for actor in actors %}
+                <li>{{actor.actor_name}}</li>
+                {% endfor %}
+            </ul>
+    </div>
+{% endif %}
+
+{% if f == 4 %}
+Coment for movie
+<div class="row1">
+    <div class="col1 cols1">
+        <div>
+            <h2>{{movie.title}}</h2>
+            <h4>Year: {{movie.year}}</h4>
+            <h4>Genere: {{movie.genere.genere_name}}</h4>
+        </div>
+    </div>
+    <div class="col2 cols2">
+        <h2>Description
+            <span style="margin: 5%"></span>
+                {% if user.is_authenticated and user.id == movie.user.id %}
+                    <a href="{% url 'edit_movie' movie.id%}" style="margin-left: 0%;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Edit</button></a>
+                    <a href="{% url 'delete_movie' movie.id%}" style="margin-left: 0%;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Remove</button></a>
+                {% endif %}
+        </h2>
+        <h4>Director: {{movie.director}}</h4>
+        <h4>Actors:
+            <span>
+                {% for movieactor in movieactors %}
+                    {% if movieactor.movie_id.id == movie.id %}
+                        {% for actor in actors %}
+                            {% if movieactor.actor_id.id == actor.id %}
+                                {{actor.actor_name}},
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </h4>
+        <h6>{{movie.description}}</h6>
+    </div>
+    <div class="col3 cols3">
+        <h2>Grade:
+            {% for key, value_list in g_mo.items %}
+                {% if key == movie.id and cg != 1%}
+                    {{ value_list.0 }}
+                    {% for grade in grades %}
+                        {% if value_list.1 == user.id == grade.user_id.id and grade.movie_id.id == movie.id and user.is_authenticated %}
+                            <a href="{% url 'edit_grade_com' movie.id %}"><button type="button" class="btn btn-primary btn-sm" id="edit_grade" data-value={{grade.id}} style="background-color: #a00000; border-color: #a00000;">Edit</button></a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </h2>
+            {% if user.is_authenticated and movie.id not in gr %}
+                <form id="compose-form-grade">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input autofocus class="form-control" type="text" id="grade" placeholder="Grade">
+                    </div>
+                    <input type="hidden" id="grade_movie" value="{{ movie.id }}">
+                    <input type="hidden" id="edit_grade_type" value="coment">
+                    <input type="submit" class="btn btn-primary" id="submit-grade" style="background-color: #a00000; border-color: #a00000;"/>
+                </form>
+            {% endif %}
+            {% if user.is_authenticated and cg == 1 %}
+                <form id="edit-form-grade">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input autofocus class="form-control" type="number" id="grade_edit" value="{{grade.grade}}" min="0" max="5" step="0.1">
+                    </div>
+                    <input type="hidden" id="grade_movie" value="{{ movie.id }}">
+                    <input type="hidden" id="edit_grade_id" value="{{ grade.id }}">
+                    <input type="hidden" id="edit_grade_type" value="coment">
+                    <input type="submit" class="btn btn-primary" id="submit-grade" style="background-color: #a00000; border-color: #a00000;"/>
+                </form>
+            {% endif %}
+        <h6>Number of grades: {{ movie.numberOfGrades }}</h6>
+    </div>
+</div>
+
+<div class="coment-phone">
+{% if user.is_authenticated %}
+<br>
+<div class="coment" id="aa">
+    <div id="compose-view3">
+        <h3>New Coment</h3>
+        <form id="compose-form-coment">
+            {% csrf_token %}
+            <textarea class="form-control" id="coment_text" placeholder="Body"></textarea>
+            <br>
+            <input type="hidden" id="coment_movie" value="{{ movie.id }}">
+            <input type="submit" class="btn btn-primary" id="submit-coment" style="background-color: #a00000; border-color: #a00000;"/>
+        </form>
+    </div>
+</div>
+<br>
+{% endif %}
+
+<div class="coment" id="aa">
+    <h3>Coments</h3>
+    <ul>
+        {% for coment in coments %}
+            {% if coment.id == coment_id %}
+                <h5>Edit coment</h5>
+                <form id="compose-form-edit">
+                    {% csrf_token %}
+                    <textarea class="form-control" id="coment_edit" placeholder="Body">{{coment.textComent}}</textarea>
+                    <br>
+                    <input type="hidden" id="coment_edit_movie" value="{{ movie.id }}">
+                    <input type="hidden" id="coment_edit_id" value="{{ coment.id }}">
+                    <input type="submit" class="btn btn-primary" id="edit-coment" style="background-color: #a00000; border-color: #a00000;"/>
+                </form>
+                 <hr>
+            {% else %}
+                <li style="list-style-type:none">
+                    <span>{{coment.user_id.username}}
+                        <span style="margin: 4%"></span>
+                        {% if user == coment.user_id%}
+                            <a href="{% url 'delete_coment' coment.id%}" style="text-align: right;"><button type="button" class="btn btn-primary btn-sm" style="background-color: #a00000; border-color: #a00000;">Remove</button></a>
+                            <a href="{% url 'edit_coment' coment.id %}"><button type="button" class="btn btn-primary btn-sm" id="edit_coment" data-value={{coment.id}} style="background-color: #a00000; border-color: #a00000;">Edit</button></a>
+                        {% endif%}
+                    </span>
+                    </br>
+                    {{coment.textComent}}
+                    <hr>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'capstone/index.js' %}"></script>
+{% endblock %}

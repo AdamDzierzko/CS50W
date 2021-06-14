@@ -1,0 +1,116 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% for listing in listings%}
+<br class="container" style="min-width: 2000px;">
+    <div class="text-left">
+        <h2>Listing: {{ listing.title }}</h2>
+    </div>
+{% if user.is_authenticated %}
+    {% if listing.id in watchlist %}
+        <a href="{% url 'removeFromWatchlist' listing.id%}" style="text-align: right;"><button type="button" class="btn btn-primary btn-lg">Remove form watchlist</button></a>
+    {% else %}
+        <a href="{% url 'addToWatchlist' listing.id%}" style="text-align: right;"><button type="button" class="btn btn-outline-primary btn-lg">Add to watchlist</button></a>
+    {% endif %}
+</br>
+</br>
+{% endif %}
+    <div class="text-left">
+        <img src="{{listing.image}}" class="card-img" alt="..." style="width:500px">
+    </div>
+    <div class="text-left">
+        <p>{{ listing.description }}</p>
+    </div>
+    <div class="text-left">
+        {% if listing.status == 1%}
+        {% if listing.id in price %}
+            {% for bid in bids %}
+                {% if listing.id == bid.listing_id.id %}
+                    <h1>$ {{ bid.bid }}</h1>
+                    <p>{{ bid.numberOfBids }} bid(s) so far. Your bid is the current bid.</p>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+                    <h1>$ {{ listing.price }}</h1>
+                    <p>0 bid(s) so far. Your bid is the current bid.</p>
+        {% endif %}
+    </div>
+
+    {% if user.is_authenticated %}
+        {% if mes == 0 %}
+    <div class="text-left">
+        <form action="{% url 'riseBid' listing.id%}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="number" name="bid" placeholder="Bid">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Place Bid">
+        </form>
+    </div>
+    </br>
+
+        {% else %}
+  <div class="alert alert-danger alert-dismissible">
+    <a href="{% url 'one' listing.id%}" style="text-align: right;"><button type="button" class="close" data-dismiss="alert">&times;</button></a>
+    <strong>Error!</strong> Your bid is too low !
+  </div>
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% if listing.id in price %}
+        {% for bid in bids %}
+            {% if listing.id == bid.listing_id.id %}
+            <div class="alert alert-success alert-dismissible">
+                <a href="{% url 'one' listing.id%}" style="text-align: right;"><button type="button" class="close" data-dismiss="alert">&times;</button></a>
+                <h1><strong>Won by {{ bid.user_id }}!</strong> Final price: $ {{ bid.bid }}</h1>
+            </div>
+            <p>After {{ bid.numberOfBids }} bid(s).</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+    {% if us == listing.owner %}
+        {% if listing.status == 1%}
+        <a href="{% url 'close' listing.id%}" style="text-align: right;"><button type="button" class="btn btn-primary btn-lg">Close Auction</button></a>
+</br>
+</br>
+        {% endif %}
+    {% endif%}
+
+    <div class="text-left">
+        <h3>Details</h3>
+        <ul>
+            <li>Description: {{ listing.description }}</li>
+            <li>Listed by: {{ listing.owner }}</li>
+            <li>Category: {{ listing.category.categoryName }}</li>
+        </ul>
+    </div>
+
+       <h2>Comments</h2>
+       {% for comment in comments%}
+    <div class="text-left">
+
+        <ul>
+            <p>{{ comment.comment }}</br>
+            Author: {{ comment.user_id }}
+        </ul>
+    </div>
+        {% endfor %}
+
+{% if user.is_authenticated %}
+    <div class="text-left">
+        <h2>Add comments</h2>
+            <form action="{% url 'addComment' listing.id%}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="comment" placeholder="Comment">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Add Comment">
+        </form>
+    </div>
+{% endif %}
+
+        {% endfor %}
+{% endblock %}

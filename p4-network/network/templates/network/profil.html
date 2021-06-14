@@ -1,0 +1,35 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+{{ user }}
+<br>
+<div class="container" style="min-width: 2000px;" >
+    <div class="col-lg-12">
+        <div class="col-lg-12">
+            <div class="card card-body h-100 justify-content-center" id="aa">
+                <div id="compose-view">
+                    <h3>New Post</h3>
+                    <form id="compose-form">
+                        {% csrf_token %}
+                        <textarea class="form-control" id="post-text" placeholder="Body"></textarea>
+                        <br>
+                        <input type="submit" class="btn btn-primary" id="submit"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
